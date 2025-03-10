@@ -1,0 +1,19 @@
+array dan linked list ini memiliki capabilitas yang sama namun orang" suka menggunakan linked list karena array ini tidak efisien dalam management memori 
+contoh saja dalam insert elemen baru ini tergantung dari besar array tersebut sama juga dengan insert dan add elemen baru sehingga big- O adalah o(n) karena selaras dengan besar dari array nya sendiri
+
+linked list
+array ini di dalam memory dia akan membentuk memory yang continues contoh bila kita membuat int A[4] dimana int ini menggunakan memory 4 bytes bila kita membuat array yg isinya 4 maka akan membutuhkan 16 bytes memory secara continues hal ini akan tidak efisien karena
+sehingga bila memory sebelahnya digunakan maka dia tidak akan bisa bertambah maka kita harus membuat array baru lagi yang dimana kita harus memindah dan mencopy array tersebut hal ini sangatlah tidak efisien maka untuk mencegah hal ini kita bisa menggunakan linked list yang dimana
+dalam penyimpanannya dia akan menggunakan dua block memory 4 bytes jadi dia membutuhkan 8 bytes memory yang dimana dia akan menyimpan nilai dari variabel tersebut dan alamat variabel selanjutnya jiuka digambarkan berarti linked list ini tidak continues dia bisa berada di alamat yang tidak berurutan
+tetapi bisa kita track karena di setiap node nya ada alamat dari value selanjutnya jadi kita bisa terus menambah nilai tanpa perlu takut untuk dibatasi oleh memori lain. untuk mengakses linked list ini maka kita memerlukan alamat dari head node
+
+array vs linked list
+setiap data structure ini ada kelebihan dan kekurangan:
+dalam memory management linked list ini lebih baik karena tidak ada element yang tidak digunakan beda dengan array bisa ada memory yang tidak digunakan
+kemudian dalam mengakses element array lebih baik karena membutuhkan O(1) yang berarti dia konstan maka bila kita sering mengakses element maka array lebih baik sedangkan linked list ini memiliki waktu O(n) yang dimana kita harus cek satu" untuk mengakses beda dengan array yang kita bisa langsung akses bila mengetahui alamat
+dalam besar memori linked list ini juga memakan memory yang besar karena dia menyimpan data dan juga menyimpan alamat ke data selanjutnya beda dengan array yang hanya membutuhkan memory untuk menyimpan data saja
+untuk pengaplikasian array juga lebih mudah karena dari emmory manager langsung di assign 1 block besar linked list dalam pengaplikasian  lebih sulit karena berhadapan dengan masalah segmentation dan memory leak
+kemudian dalam insert data array diawal array dia akan membutuhkan O(n) karena bila array sudah terisi maka dia akan membutuhkan waktu sebanyak isi untuk di pindahkan sebelum bisa insert di awal, ketika di posisi Nth maka dia perlu waktu O(n) juga karena dia harus memindahkan data sebelum dan sesudahnya baru bisa insert data baru, untuk diposisi akhir array memiliki waktu constant atau O(1) karena tidak memindah apapun
+insert dalam linked list ketika diawal dia memiliki waktu constant atau O(1) karena dia tidak perlu memindahkan data tinggal lgsg insert data dan alamat data selanjutnya, untuk insert data di akhir dan di posisi Nth dia perlu membaca seluruh data maka membutuhkan waktu sebanyak data yang ada di linked list jadi mempunyai wakti O(n)
+
+di linked list ini kita hanya perlu mengetahui alamat dari head node untuk mengakses linked list  
