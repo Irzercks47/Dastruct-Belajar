@@ -16,4 +16,10 @@ untuk pengaplikasian array juga lebih mudah karena dari emmory manager langsung 
 kemudian dalam insert data array diawal array dia akan membutuhkan O(n) karena bila array sudah terisi maka dia akan membutuhkan waktu sebanyak isi untuk di pindahkan sebelum bisa insert di awal, ketika di posisi Nth maka dia perlu waktu O(n) juga karena dia harus memindahkan data sebelum dan sesudahnya baru bisa insert data baru, untuk diposisi akhir array memiliki waktu constant atau O(1) karena tidak memindah apapun
 insert dalam linked list ketika diawal dia memiliki waktu constant atau O(1) karena dia tidak perlu memindahkan data tinggal lgsg insert data dan alamat data selanjutnya, untuk insert data di akhir dan di posisi Nth dia perlu membaca seluruh data maka membutuhkan waktu sebanyak data yang ada di linked list jadi mempunyai wakti O(n)
 
-di linked list ini kita hanya perlu mengetahui alamat dari head node untuk mengakses linked list  
+di linked list ini kita hanya perlu mengetahui alamat dari head node untuk mengakses linked list
+
+
+
+doubly linked list
+bedanya ini dengan diatas adalah doubly ini memiliki prev dan next jadi antara list ini saling berhubungan tidak dengan diatas yang kita hanya bisa ke list selanjutnya kelebihan dari doubly yang lain adalah mudahnya melakukan reversal karena sudah listnya sudah mencatat alamat list slanjutnya dan sebelumnya kemudian memudahkan juga dalam insertion dan deletion
+namun doubly ini memiliki kelemahan yang pertama adalah membutuhkan memory yang lebih besar karena menyimpan data dan 2 alamat kalau yang diatas menyimpan 8 byte maka doubly ini menyimpan 12 byte, kemudian kita harus mereset banyak alamat dalam insertion dan deletion, lebih mudah terjadi error karena banyaknya alamat yang digunakan

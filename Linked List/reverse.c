@@ -81,6 +81,8 @@ int main()
 	//recursion
 	Print(head);
 	Reverse_Print(head);
+	Reverse_List(head);
+	Print(head);
 	
 	return 0;
 }
