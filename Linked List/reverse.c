@@ -6,9 +6,12 @@ typedef struct Node
 	int data;
 	struct Node *next;	
 }Node;
+void Print();
+void Reverse_Print();
 
 Node *head;
 
+/*** iteration
 //reverse linked list
 void Reverse()
 {
@@ -30,6 +33,18 @@ void Reverse()
 	head = prev;
 }
 
+void Print()
+{
+	Node* temp = head;
+	while(temp != NULL)
+	{
+		printf("%d ", temp->data);	
+		temp = temp->next;
+	}
+	printf("\n");
+}
+***/
+
 //insert in the end
 void Insert(int data)
 {
@@ -49,18 +64,6 @@ void Insert(int data)
 	temp2->next = temp1;
 }
 
-void Print()
-{
-	Node* temp = head;
-	while(temp != NULL)
-	{
-		printf("%d ", temp->data);	
-		temp = temp->next;
-	}
-	printf("\n");
-}
-
-
 int main()
 {
 	head = NULL;
@@ -68,9 +71,42 @@ int main()
 	Insert(4);
 	Insert(6);
 	Insert(5);
+	//iteration
+	/**
 	Print();
 	Reverse();
 	Print();
+	**/
+	//recursion
+	Print(head);
+	Reverse_Print(head);
 	
 	return 0;
+}
+
+/***recursion***/
+//untuk rekursif maka kita bisa passing parameternya meskipun variabel global karena fungsinya dari passing ini adalah biar kita tahu posisi berada dimana
+//cara kerjanya adalah kita akan passing head kemudian kita akan memanggil nextdari list tersebut hingga list ini Null
+void Print(Node *p) //p adalah head 
+{
+	Node *temp = p;//membuat temp untuk manmpung head
+	if(temp == NULL)//bila temp null maka akan return
+	{
+		printf("\n");
+		return;
+	}
+	printf("%d", temp->data);//print data dari temp
+	Print(temp->next);//kita akan print list selanjutnya
+}
+
+//untuk reverse print ini bisa lebih belajar tentang dynamic memory allocation
+//yang dimana saat kita memanggil fungsi kita akan membuat bubble di stack yang dimana kita akan memanggil fungsi terus menerus hingga recursif habis
+//ketika rekursif habis stack ini akan menghilangkan bubble yang dari terbelakang dulu
+//setelah rekursif habis baru kita akan print datanya maka bisa reverse 
+void Reverse_Print(Node *p)
+{
+	Node *temp = p;
+	if(temp == NULL) return;
+	Reverse_Print(temp->next);
+	printf("%d", temp->data);
 }
