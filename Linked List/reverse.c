@@ -8,6 +8,7 @@ typedef struct Node
 }Node;
 void Print();
 void Reverse_Print();
+void Reverse_List();
 
 Node *head;
 
@@ -105,8 +106,33 @@ void Print(Node *p) //p adalah head
 //setelah rekursif habis baru kita akan print datanya maka bisa reverse 
 void Reverse_Print(Node *p)
 {
-	Node *temp = p;
-	if(temp == NULL) return;
-	Reverse_Print(temp->next);
-	printf("%d", temp->data);
+	if(p == NULL) return;
+	Reverse_Print(p->next);
+	printf("%d", p->data);
+}
+
+//cara kerjanya hampir sama dengan yang reverse print
+//bedanya disini kita ingin rekursif sampai list ini akan habis makanya dia exit condition menggunakan p->next
+void Reverse_List(Node *p)
+{
+	//bila p->next == NULL maka kita akan menjalankan if
+	if(p->next == NULL)
+	{
+		//kita akan ganti head menjadi p yang berarti list terakhir atau p akan menjadi head
+		head = p;
+		//pada saat ini p akan berada di list akhir dan return
+		return;
+		//karena list terakhir return maka kita nanti akan berada di list yang sebelum habis
+		//jadi tidak akan menjalankan rekursif lagi  
+	}
+	//disini kita akan melakukan rekursif sampai list ini akan habis
+	Reverse_List(p->next);
+	//saat rekursif habis maka kita akan membuat variabel q yang berisi list terakhir
+	Node *q = p->next;
+	//kemudian kita mengganti next dari list tersebut ke list sebelumnya sehingga bisa akan reverse
+	q->next = p;
+	//setelah itu kita juga mengganti next dari list sebelumnya dengan null
+	//disini menggunakan null karena bila rekursif maka null ini akan terbawa sampai akhir sehingga list terakhir akan mempunyai next berupa null
+	p->next = NULL;
+	//maka saat operasi ini selesai maka q akan menjadi list sebelumnya dan p menjadi list sesudahnya
 }
