@@ -115,6 +115,96 @@ void InsertAtTail(int x) {
 	temp->next = newNode;
 }
 
+void DeleteAtHead() {
+	//bila head null maka akan return
+	if(head == NULL) {
+		return;
+	}
+	//kita assign head di temp
+	Node *temp = head;
+	//kita akan ganti alamat di head dengan next yang ada di temp
+	head = temp->next;
+	//kita hapus temp
+	free(temp);
+	//karena temp->next tadi sudah menjadi head maka kita perlu mengganti prev menjadi NULL supaya tidak mengarah ke alamat yang sudah tidak dipakai 
+	head->prev = NULL;
+}
+
+void DeleteAtTail() {
+	//bila head null maka akan return
+	if(head == NULL) {
+		return;
+	}
+	//kita assign head di temp
+	Node *temp = head;
+	//kita akan looping sampai list terakhir
+	while(temp->next != NULL){
+		temp = temp->next;
+	}
+	//jika temp->prev == NULL atau tail merupakan satu"nya list di doubly maka
+	if(temp->prev == NULL){
+		//head kita null kan
+		head = NULL;
+		//kemudian temp kita free
+		free(temp);
+		return;
+	}
+	//namun bila tail ini bukan list satu"nya maka
+	//next dari list sebelum temp akan kita ganti dengan null karena bila tail didelete maka next dari list sebelum temp akan null
+	temp->prev->next = NULL;
+	//kemudian temp kita free
+	free(temp);
+}
+
+void DeleteAtNth(int pos){
+	//kita assign head di temp
+	Node *temp = head;
+	//bila head null maka akan return
+	if(head == NULL) {
+		return;
+	}
+	//jika pos sama dengan 1
+	if(pos == 1){
+		//kita akan ganti alamat di head dengan next yang ada di temp
+		head = temp->next;
+		//kemudian temp kita free
+		free(temp);
+		//karena temp->next tadi sudah menjadi head maka kita perlu mengganti prev menjadi NULL supaya tidak mengarah ke alamat yang sudah tidak dipakai
+		head->prev = NULL;
+		return;
+	}
+	int i;
+	//kita ingin mencapai list terakhir namun bila pos melebihi jumlah list maka looping akan berhenti di list terakhir
+	for (i = 0; i < pos-2 && temp->next != NULL; i++){
+		temp = temp->next;
+	}
+	//jika next dari temp null atau berada di list terakhir maka
+	if(temp->next == NULL){
+		//jika temp->prev == NULL atau tail merupakan satu"nya list di doubly maka
+		if(temp->prev == NULL){
+			//head kita ganti dengan null
+			head = NULL;
+			//kemudian temp kita free
+			free(temp);
+			return;
+		}
+		//namun bila tail ini bukan list satu"nya maka
+		//next dari list sebelum temp akan kita ganti dengan null karena bila tail didelete maka next dari list sebelum temp akan null
+		temp->prev->next = NULL;
+		//kemudian temp kita free
+		free(temp);
+		return;
+	}
+	//jika list yang akan dihapus berada diantara 2 list maka
+	//next dari list sebelum temp akan kita ganti dengan alamat yang ada di next dari temp karena kita akan menghapus temp
+	temp->prev->next = temp->next;
+	//kemudian prev dari list selanjutnya dari temp akan kita ganti dengan prev dari temp karena kita akan menghapus temp
+	temp->next->prev = temp->prev;
+	//kita mengganti alamat yang ada di next dari list sebelum temp dan prev dari list selanjutnya dari temp supaya kita bisa menggabungkan list sebelum dan sesudah temp 
+	//kemudian temp kita free
+	free(temp);
+}
+
 int main()
 {
 	InsertAtHead(2);Print();ReversePrint();
@@ -123,5 +213,8 @@ int main()
 	InsertAtTail(7);Print();
 	InsertAtNth(8, 2); Print();
 	InsertAtNth(1, 8); Print();
+	DeleteAtHead();Print();
+	DeleteAtTail();Print();
+	DeleteAtNth(10);Print();
 	return 0;
 }
