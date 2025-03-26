@@ -1,0 +1,14 @@
+Stack merupakan data structures yang bisa direpesentasikan dengan tumpukan yang dimana memiliki pedoman LIFO(Last In First Out) yang dimana yang pertama masuk itu yang terakhir keluar
+contohnya seperti tumpukan piring yang dimana piring yang pertama ditumpuk ini akan digunakan terakhir dan piring yang terakhir masuk di tumpukan dan yang paling atas akan digunakan terlebih dahulu
+stack ini mempunyai beberapa operasi seperti push, pop, top, dan isEmpty:
+push adalah nama lain dari insertion
+pop adalah nama lain dari deletion
+top ini kita akan menunjukkan elemen diatas
+kemudian isEmpty akan memnujukkan bila stack ini tidak mempunyai isi
+
+pengaplikasian stack ini biasanya digunakan pada:
+function calls/rekursif pengaplikasian stack ini digunakan dalam function calls yang ada di dynamic memory allocation kemudian rekursif sendiri adalah chaining dari function itu sendiri
+undo di text editor
+
+untk time complexity di stack adalah constant semua
+kita bisa mengimplementasikan stack dengan menggunakan array dan linked list
