@@ -1,0 +1,36 @@
+balancing parethesis ini dalam implementasinya menggunakan stack gunanya balancing ini adalah melacak parenthesis dalam code yang dimana, balancing ini memiliki beberapa rule agar bisa bekerja yaitu:
+1. parenthesis pembuka ini harus berada dikiri
+2. pembukaan parenthesis yang terakhir harus ditutup dahulu
+3. parethesis tidak boleh ditutup bila setelah ada pembukaan ada penutupan terhadap parenthesis sebelumnya
+
+solusi untuk problem blanacing ini adalah kita melakukan scan dari kiri ke kanan
+kemudian bila ada opening maka kita masukkan ke list
+namun bila ada closing kita akan menghapus simbol opening yang ada di list
+bila ada closing namun tidak jenisnya tidak sesuai dengan opening dan bila ada closing namun tidak ada opening maka kita akan stop proses
+proses ini harusnya selesai dengan list yang kosong bila tidak maka opening ini tidak menemukan closer yang berarti tidak balance
+berikut adalah pseudocode:
+
+CheckBalancedParenthesis(expression/exp)
+{
+n => panjang dari char(exp)
+s => stack
+
+for i = 0 to n-1
+{
+	if exp[i] adalah '(' or '{' or '['
+		maka push (exp[i]) ini ke stack
+	else if exp[i] adalah ')' or '}' or ']'
+	{
+		if(s is empty) atau (top ini tidak sama jenis dengan dengan exp[i])
+		maka akan return false atau tidak balance
+		else akan di pop
+	}
+	return s is eempty ? true : false disini kita cek apakah stack kosong atau tidak
+}
+
+
+
+
+
+
+NB: parenthesis adalah [], {}, dan ()

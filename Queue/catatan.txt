@@ -1,0 +1,11 @@
+queue memiliki sifat fifo(first in frst out) queue juga berarti antri yang dimana yang msauk pertama pasti akan keluar pertama maka untuk insertion queue ini masuk lewat tail dan keluar lewat head
+operasi:
+1. endqueue atau push
+2. dequeue atau pop
+3. front atau peek
+4. isEmpty
+5. isFull
+
+time complexity dari operasi ini adalah constant atau o(1)
+
+penggunaan queue ini biasanya digunakan untuk memproses resource yang hanya bisa diproses satu"
