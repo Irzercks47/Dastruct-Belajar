@@ -15,10 +15,10 @@ int isEmpty(){
 	//false
 	return 1;
 }
-//dalam enqueu kita bisa menggunakan modulus agar array ini membetuk lingkaran dalam logical view
+//dalam enqueue kita bisa menggunakan modulus agar array ini membetuk lingkaran dalam logical view
 //fungsi berbentuk lingkaran ini adalah agar memory di array ini tidak bisa habis bila kita enqueue dan dequeque secara terus menerus
 void Enqueue(int n){
-	//jika tail sama denagan head berarti array seadang full
+	//jika tail sama dengan head berarti array seadang full
 	if((tail + 1) % MAX_SIZE == head){
 		printf("Queue is full \n");
 		return;
@@ -52,7 +52,7 @@ int Dequeue(){
 		//dalam array dequeque kita makan increment head supaya kita tidak bisa mengambil nilai dari index tersebut
 		head++ % MAX_SIZE;
 	}
-	//kita akan return element yang di dequeque
+	//kita akan return element yang di dequeue
 	return x[temp];
 }
 
