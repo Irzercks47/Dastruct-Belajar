@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdint.h>
 
 //dalam struct nya menggunakan nama diatas
 typedef struct BstNodes{
@@ -33,7 +34,7 @@ bst* Insert(bst *root, int data){
 		//akan melakukan recurse terus sampai mendapat node kosong
 		root->right = Insert(root->right,data);
 	}
-	//kita akan return rootnya karena root ini buka variable global
+	//kita akan return rootnya karena root ini bukan variable global
 	return root;
 }
 
@@ -106,6 +107,39 @@ int FindHeight(bst* root){
 	return fmax(FindHeight(root->left), FindHeight(root->right)) + 1;
 }
 
+//traversal sesuai dengan level dari nodenya
+void LevelOrder(bst *root){
+	//bila root kosong berarti bst kosong jadi akan return null
+	if(root == NULL){
+		printf("Root is null");
+		return;
+	}
+	//Tipe uintptr_t memungkinkan kita menyimpan pointer (bst*) sebagai angka.
+	uintptr_t q[100];
+	//karena disini menggunakan queue yang dimana insertion dari tail dan deletion dari head
+	int tail = 0,head = 0;
+	//kita akan masukkan root kedalam queue tail dengan root dan juga kita perlu increment tail karena sudah ada insertion
+	q[tail++] = (uintptr_t)root;
+	printf("BST: ");
+	//menggunakan head < tail karena tail ini menggambarkan isi dari queue jadi bila head kurang dari tail maka artinya queue msih ada isinya
+	while (head < tail){
+		//kita masukkan pointer yang ada di head untuk melakukan traversal dan sebagai penanda posisi kita
+		bst *curr = (bst*)q[head++];
+		printf("%d ", curr->data);
+		//bila left dari curr ada maka
+		if(curr->left != NULL) {
+			//kita akan melakukan insertion di queue dan jangan lupa untuk increment pada tail sebagai pertanda adanya insertion
+ 			q[tail++] = (uintptr_t)curr->left;
+		}
+		//bila right dari curr ada maka
+		if(curr->right != NULL) {
+			//kita akan melakukan insertion di queue dan jangan lupa untuk increment pada tail sebagai pertanda adanya insertion
+			q[tail++] = (uintptr_t)curr->right;
+		}
+	}
+	printf("\n");
+}
+
 int main(){
 	bst *root = NULL;
 	root = Insert(root, 10);
@@ -123,7 +157,7 @@ int main(){
 //	else printf("There is no such number \n");
 	printf("Min Node is: %d \n", FindMin(root));
 	printf("Max Node is: %d \n", FindMax(root));
-	
+	LevelOrder(root);
 	return 0;
 }
 
