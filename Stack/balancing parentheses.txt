@@ -25,7 +25,7 @@ for i = 0 to n-1
 		maka akan return false atau tidak balance
 		else akan di pop
 	}
-	return s is eempty ? true : false disini kita cek apakah stack kosong atau tidak
+	return s is empty ? true : false disini kita cek apakah stack kosong atau tidak
 }
 
 

@@ -1,0 +1,12 @@
+Tree merupakan data structures yang merupakan kumpulan nodes yang berhubungan yang mensimulasi hierarki
+
+pengaplikasian tree contohnya adalah:
+1. peyimpanan data yang secara natural heirarki e.g: file system
+2.mengatur data untuk quick search, insertion,deletion e.g binary search tree
+3.trie digunakan di kamus
+4.network routing algoritma
+
+binary tree adalah tree yang hanya boleh memiliki 2 anak binary tree ini memiliki jenis seperti proper/strict binary tree yang dimana setiap node harus memiliki 0 atau 2 children
+
+Binary search tree adalah binary tree yang efisien untuk quick search dan update dalam bst juga data ini akan di atur yang dimana bila data merupakan angka maka angka yang kecil atau sama dengan parent akan di taruh dibagian kiri dan yang besar dibagian kanan
+dalam semua operasi di bst akan memiliki time complexity o(log n) karena di bst semua operasinya harus dilakukan lewat searching terlebih dahulu, kemudian setelah selesai insertion dan deletion bst biasanya akan unbalanced maka akan dilakukan balancing 

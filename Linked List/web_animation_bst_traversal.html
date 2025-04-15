@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recursive Tree Height Animation</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .tree {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .node {
+            border: 2px solid #333;
+            border-radius: 50%;
+            padding: 10px 15px;
+            margin: 10px;
+            display: inline-block;
+            position: relative;
+            background: white;
+            transition: background 0.3s;
+        }
+
+        .highlight {
+            background: #ffe08a;
+        }
+
+        .returning {
+            background: #a6f3a6;
+        }
+
+        .line {
+            position: absolute;
+            height: 2px;
+            background: #333;
+            transform-origin: left center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Recursive Tree Height Traversal</h1>
+    <div class="tree">
+        <div id="n10" class="node">10</div>
+    </div>
+    <div class="tree">
+        <div id="n8" class="node">8</div>
+        <div style="width: 80px;"></div>
+        <div id="n12" class="node">12</div>
+    </div>
+    <div class="tree">
+        <div id="n6" class="node">6</div>
+    </div>
+    <button onclick="startTraversal()">Start Traversal</button>
+
+    <script>
+        const steps = [
+            () => highlight('n10'),
+            () => highlight('n8'),
+            () => highlight('n6'),
+            () => markReturning('n6', 'Height 0'),
+            () => markReturning('n8', 'Height 1'),
+            () => highlight('n12'),
+            () => markReturning('n12', 'Height 0'),
+            () => markReturning('n10', 'Height 2')
+        ];
+
+        let step = 0;
+
+        function highlight(id) {
+            clearHighlights();
+            document.getElementById(id).classList.add('highlight');
+        }
+
+        function markReturning(id, label) {
+            clearHighlights();
+            const el = document.getElementById(id);
+            el.classList.add('returning');
+            el.innerText = id.substring(1) + "\n" + label;
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.node').forEach(el => {
+                el.classList.remove('highlight', 'returning');
+                if (!el.innerText.includes('Height')) {
+                    el.innerText = el.id.substring(1);
+                }
+            });
+        }
+
+        function startTraversal() {
+            step = 0;
+            clearHighlights();
+            runNextStep();
+        }
+
+        function runNextStep() {
+            if (step >= steps.length) return;
+            steps[step++]();
+            setTimeout(runNextStep, 1000);
+        }
+    </script>
+</body>
+
+</html>
