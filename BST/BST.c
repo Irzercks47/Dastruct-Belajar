@@ -50,7 +50,7 @@ int Search(bst *root ,int data){
 	else Search(root->right, data);
 }
 
-//di funsgi ini kita akan mencari nilai min dari data
+//di fungsi ini kita akan mencari nilai min dari data
 int FindMin(bst *root){
 	//bila root null atau kosong maka kita akan return 0 dan ada message root is null atau bisa kita sebut tree kosong
 	if(root == NULL){
@@ -107,7 +107,7 @@ int FindHeight(bst* root){
 	return fmax(FindHeight(root->left), FindHeight(root->right)) + 1;
 }
 
-//traversal sesuai dengan level dari nodenya
+//traversal sesuai dengan level dari nodenya atau bisa disebut bredth first
 void LevelOrder(bst *root){
 	//bila root kosong berarti bst kosong jadi akan return null
 	if(root == NULL){
@@ -140,6 +140,108 @@ void LevelOrder(bst *root){
 	printf("\n");
 }
 
+//dalam depth traversal ini printf ini bisa kita misalkan sebagai root
+//preorder -> root left right, karena mulai dari root sehingga kita bisa menaruh printf dlu baru rekursi kiri dan kekanan
+void PreOrder(bst *root){
+	if(root == NULL) return;
+	printf("%d ", root->data);
+	PreOrder(root->left);
+	PreOrder(root->right);
+}
+
+//inorder -> left root right, karena mulai dari left sehingga kita bisa menaruh rekursi kiri dlu baru printf kemudian rekursi ke kanan
+void InOrder(bst *root){
+	if(root == NULL) return;	
+	InOrder(root->left);
+	printf("%d ", root->data);
+	InOrder(root->right);
+}
+
+//inorder -> left right root, karena mulai dari left sehingga kita bisa menaruh rekursi kiri dlu baru rekursi ke kanan kemudian printf 
+void PostOrder(bst* root){
+	if(root == NULL) return;
+	PostOrder(root->left);
+	PostOrder(root->right);
+	printf("%d ", root->data);
+}
+
+//mengecek apakah tree ini bst
+//jadi cara kerjanya adalah kita akan mengecek apalah value dari root->data ini sesuai dengan rentan dari min dan max value
+//untuk membangdingkan root kita menggunakan min dan max dari integer
+int BstUtil(bst *root, int minValue, int maxValue){
+	//bila tree dan subtree ini kosong maka kita akan return true
+	if(root == NULL) return 1;
+	//bila root->data ini lebih besar dari min dan lebih kecil dari max
+	if(root->data >= minValue && root->data <= maxValue
+		//dan disini kita akan lakukan rekursi dengan dengan memanggil BstUtil(root->left, minValue, root->data) dalam case ini karena kita ke node kiri maka kita akan memanggil fungsi BstUtil(alamat left, minValue, 10)
+		//kemudian kita akan mengecek if(root->data >= minValue && root->data <= maxValue) karena kita sudah pindah node yang memiliki data  8 sehingga if ini akan menjadi if(8 >= minValue && 8 <= 10) yang dimana adalah true untuk selanjutnya cara kerjanya sama seperti ini tinggal kita mengganti nilai saja
+	 	&& BstUtil(root->left, minValue, root->data)
+	 	//bagian ini cara kerjanya sama dengan diatas
+		&& BstUtil(root->right, root->data, maxValue))
+			//bila sudah memenuhi semua persyaratan diatas maka akan return true
+			return 1;
+	//sebaliknya akan return false
+	else return 0;
+	//jadi dia akan akumulasi semua returnnya dari root ke subtree hingga ke leaf node bila semua return true maka tree adalah bst
+	//bila misal ada yang tidak sesuai maka dia akan terus return false
+}
+
+//memudahkan dalam pemanggilan fungsi pengecekan bst
+int IsBst(bst *root){
+	return BstUtil(root, INT_MIN, INT_MAX);
+}
+
+//delete node di bst
+bst* Delete(bst* root, int data){
+	//bila root null akan return root atau null karena disini root = null
+	if(root == NULL) return root;
+	//bila data ini lebih kecil dari data yang ada di root maka akan ke kiri
+	//guna dari menyimpan ke root->left ini adalah bila node yang ditemukan di kiri maka kita bisa simpan state setelah dirubah
+	//nb: Setiap kali kita melakukan perubahan pada subtree melalui rekursi maka harus menyimpan kembali ke parent-nya.
+	else if(data < root->data) root->left = Delete(root->left, data);
+	//yang bagian ini sama seperti diatas
+	else if(data > root->data) root->right = Delete(root->right, data);
+	else{ //ketika sudah menemukan datanya
+		//case 1: tidak punya child
+		//bila tidak punya child kita bisa langsung hapus nodenya
+		if(root->left == NULL && root->right == NULL) {
+			//kita free rootnya
+			free(root);
+			//jadi root harus di null kan karena bila di null tetap akan ada alamatnya namun sudah tidak ada isinya supaya kita tidak ke root yang sudah di free-kan maka root harus di assign null
+			root = NULL;
+		}
+		//case 2: satu anak
+		//untuk satu anak ini kita bisa mengganti koneksi dari root yang akan dihapus ke anaknya 
+		else if(root->left == NULL){
+			//root akan di assign di temp
+			bst *temp = root;
+			//kemudian root yang akan dihapus ini akan kita ganti dengan yang ada di right
+			root = root->right;
+			//kemudian nilai root yang akan dihapus kita hapus
+			free(temp);
+		}
+		//cara kerja yang ini sama dengan yang diatas cuma disini bila yang dihapus ada di kiri
+		else if(root->right == NULL){
+			bst *temp = root;
+			root = root->left;
+			free(temp);
+		}
+		//case 3: bila punya 2 anak
+		else{
+			//kita akan mencari nilai anaknya yang paling kecil 
+			int temp = FindMin(root->right);
+			//nilai yang ingin dihapus kita ganti dengan nilai yang paling kecil
+			//nb: kenapa di case ini nodenya tidak di hapus karena dia memiliki 2 anak bila kita hapus nodenya maka struktur akan hancur dan banyak data akan hilang atau tidak bisa diakses
+			root->data = temp;
+			//kemudian karena disini kita menggunakan variasi yang dimana untuk mengganti nilai yang dihapus adalah dengan mengambil nilai min dari subtree kanan maka kita harus delete subtree di kanan
+			//nb: satu variasi lagi adalah dengan mengambil nilai max dari subtree kiri kenapa kita mencari nilai min dan max ini karena nilai ini itu pasti merupakan leaf node sehingga bila dihapus tidak akan ada masalah
+			//beda dengan yang memiliki 2 anak bila node mereka dihapus maka bst akan rusak 
+			root->right = Delete(root->right, temp);
+		}
+	}
+	return root;
+} 
+
 int main(){
 	bst *root = NULL;
 	root = Insert(root, 10);
@@ -158,6 +260,19 @@ int main(){
 	printf("Min Node is: %d \n", FindMin(root));
 	printf("Max Node is: %d \n", FindMax(root));
 	LevelOrder(root);
+	PreOrder(root);
+	printf("\n");
+	InOrder(root);
+	printf("\n");
+	PostOrder(root);
+	printf("\n");
+	if(IsBst(root) == 0){
+		printf("tree is not bst \n");
+	}
+	else printf("tree is bst \n");
+	printf("root: %d \n", root);
+	root = Delete(root, 12);
+	InOrder(root);
 	return 0;
 }
 
