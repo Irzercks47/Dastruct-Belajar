@@ -65,9 +65,9 @@ bst* Find(bst *root ,int data){
 	//bila return node kita akan return rootnya
 	else if(root->data == data) return root;
 	//kita akan search ke kiri bila data ini lebih kecil atau sama dengan root data
-	else if(data <= root->data) Search(root->left, data);
+	else if(data <= root->data) Find(root->left, data);
 	//kita akan search ke kanan bila data ini lebih besar dari root data
-	else Search(root->right, data);
+	else Find(root->right, data);
 }
 
 //di fungsi ini kita akan mencari nilai min dari data
@@ -95,10 +95,10 @@ int FindMin(bst *root){
 
 bst* FindMinimal(bst *root){
 	if(root == NULL) return NULL;
-	else if(root->left == NULL){
-		return root;
+	while(root->left == NULL){
+		root = root->left;
 	}
-	return FindMin(root->left);
+	return root;
 }
 
 //di funsgi ini kita akan mencari nilai max dari data
@@ -303,7 +303,9 @@ bst* GetInorderSuccessor(bst *root, int data){
 	if(curr == NULL) return NULL;
 	//case 1: jika node punya right
 	if(curr->right != NULL){
-		//bila menggunakan looping bisa seperti ini 
+		//bila menggunakan looping bisa seperti ini
+		//cara kerjanya adalah bila ada subtree kanan maka kita akan pergi ke substree kanan
+		//ketika sudah di substree kanan maka kita akan pergi ke anak paling kiri bila sudah di anak paling kiri maka akan kita sudah menemukan successor
 		//bst *temp = curr;
 		//while(curr->left != NULL){
 			//temp = temp->left;
@@ -311,44 +313,44 @@ bst* GetInorderSuccessor(bst *root, int data){
 			//akan return rekursi terus sampai menemukan nilai minimal di kanan
 			//Successor adalah nilai terkecil di subtree kanan
 			return FindMinimal(curr->right);
+			printf("tes");
 		}
-	}
-	//case 2: bila tidak ada right
-	//1.Mulai dari root (karena kita perlu akses ke seluruh ancestor).
-	//2.Bandingkan curr->data dengan ancestor->data:
-	//3.Kalau curr->data < ancestor->data, berarti kita sedang berada di subtree kiri, jadi ancestor ini bisa jadi successor! ? simpan ke successor, lalu lanjut ke kiri
-	//4.Kalau curr->data >= ancestor->data, berarti kita masih harus ke kanan (tidak bisa jadi successor)
-	//5.Ulangi sampai kita menemukan node curr (alias node target)	
-	Return kandidat successor terakhir yang tersimpan.
-	else{
-		//kita bikin variabel untuk menyimpan sucessor
-		bst* successor;
-		//kemudian bikin variabel untuk menyimpan karena disini tidak punya right maka kita harus simpan semua ancestor disini kita muali dari root
-		//maksud ancestor disini adalah node yang posisinya diatas dari curr
-		bst* ancestor = root;
-		//ketika ancestor atau root ini tidak sama dengan curr maka
-		//nb: curr merupakan data yang ingin kita cari successornya
-		//jadi disini kita tidak ingin ancestor nya ini sama dengan curr
-		// Kita traversal dari root menuju node 'curr'
-		while(ancestor != curr){
-			//bila data curr ini lebih kecil dari ancestor
-			// disini artinya kita berjalan ke subtree kiri, jadi kandidat ancestor bisa jadi successor
-			if(curr->data < ancestor->data){
-				//bila data dari curr kurang dari ancestor kita ingin simpan ancestor itu di successor
-				successor = ancestor;
-				//kemudian kita akan pindah lagi ke kiri untuk mencari mengecek ancestor lain
-				ancestor = ancestor->left;	
+		//case 2: bila tidak ada right
+		//1.Mulai dari root (karena kita perlu akses ke seluruh ancestor).
+		//2.Bandingkan curr->data dengan ancestor->data:
+		//3.Kalau curr->data < ancestor->data, berarti kita sedang berada di subtree kiri, jadi ancestor ini bisa jadi successor! ? simpan ke successor, lalu lanjut ke kiri
+		//4.Kalau curr->data >= ancestor->data, berarti kita masih harus ke kanan (tidak bisa jadi successor)
+		//5.Ulangi sampai kita menemukan node curr (alias node target)	
+		//Return kandidat successor terakhir yang tersimpan.
+		else{
+			//kita bikin variabel untuk menyimpan sucessor
+			bst* successor;
+			//kemudian bikin variabel untuk menyimpan karena disini tidak punya right maka kita harus simpan semua ancestor disini kita muali dari root
+			//maksud ancestor disini adalah node yang posisinya diatas dari curr
+			bst* ancestor = root;
+			//ketika ancestor atau root ini tidak sama dengan curr maka
+			//nb: curr merupakan data yang ingin kita cari successornya
+			//jadi disini kita tidak ingin ancestor nya ini sama dengan curr
+			// Kita traversal dari root menuju node 'curr'
+			while(ancestor != curr){
+				//disini kita akan memnfaatkan karakteristik bst yang dimana kiri lebih kecil dan kanan lebih besar
+				//bila data curr ini lebih kecil dari ancestor
+				//bila curr->data lebih kecil berarti ancestor ini bisa jadi adalah sucessor maka bisa kita simpan dahulu kemudian kita akan pindah ke kiri 
+				//cara kerja if disini adalah kita compare dulu baru kita pindah
+				if(curr->data < ancestor->data){
+					//bila data dari curr kurang dari ancestor berarti ancestor ini bisa jadi sucessor dari curr maka bisa kita simpan terlebih dahulu
+					successor = ancestor;
+					//kemudian kita akan pindah lagi ke kiri untuk mencari mengecek node lain
+					ancestor = ancestor->left;	
+				}
+				//bila data dari node ini lebih kecil maka berarti dia bukan ancestor maka kita bisa langsung pindah ke kanan
+				else{
+					ancestor = ancestor->right;
+				}
 			}
-			//bila data dari ancestor ini lebih kecil maka kita akan pindah ke kanan untuk mencari data yang mempunyai nilai lebih besar dari ancestor
-			// kita berada di subtree kanan, jadi tidak bisa jadi successor
-			else{
-				ancestor = ancestor->right;
-			}
+			//bila loop sudah selesai maka kita akan return
+			return successor;
 		}
-		//bila loop sudah selesai maka kita akan return
-		return successor;
-	}
-	
 }
 //nb: 
 //Predecessor adalah Node terbesar yang lebih kecil dari node saat ini.Letaknya di subtree kiri paling kanan.
@@ -401,6 +403,9 @@ int main(){
 	else printf("tree is bst \n");
 	root = Delete(root, 70);
 	InOrder(root);
+	printf("\n");
+	bst *temp = GetInorderSuccessor(root, 35);
+	printf("successor dari 35 adalah: %d", temp->data);
 	return 0;
 }
 
