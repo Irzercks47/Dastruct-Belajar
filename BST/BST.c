@@ -18,7 +18,10 @@ bst* GetNewNode(int data){
 	return newNode;
 }
 
-//dalam insert lebih enak menggunakan recursion karena lebih efisien digunakan karena kita langsung bisa memilih posisi bila bst
+// Fungsi Insert untuk memasukkan data ke dalam BST
+// Menggunakan rekursi karena:
+// 1. Mempermudah navigasi ke posisi yang tepat dalam tree.
+// 2. Tidak perlu menyimpan node saat traversal karena fungsi akan memanggil dirinya sendiri.
 bst* Insert(bst *root, int data){
 	//jika node kosong makan kita akan melakukan insertion
 	if(root == NULL){
@@ -38,12 +41,29 @@ bst* Insert(bst *root, int data){
 	return root;
 }
 
-//dalam search ini cara kerjanya sama dengan insertion yaitu kita akan recurse sampai data yang dicari ini sama dengan atau tidak sama dengan data yang ada di bst
+// Fungsi Search mencari data di dalam BST
+// Prinsipnya mirip dengan Insert:
+// - Jika data lebih kecil dari sama dengan root->data maka lanjut ke kiri
+// - Jika data lebih besar root->data maka lanjut ke kanan
+// - Jika sama maka data sudah ditemukan
 int Search(bst *root ,int data){
 	//jika root null maka akan return false yang juga berarti data tidak ada
 	if(root == NULL) return 0;
 	//namun jika ditemukan data yang sama maka akan return true
+	//bila return node kita akan return rootnya
 	else if(root->data == data) return 1;
+	//kita akan search ke kiri bila data ini lebih kecil atau sama dengan root data
+	else if(data <= root->data) Search(root->left, data);
+	//kita akan search ke kanan bila data ini lebih besar dari root data
+	else Search(root->right, data);
+}
+
+bst* Find(bst *root ,int data){
+	//jika root null maka akan return false yang juga berarti data tidak ada
+	if(root == NULL) return 0;
+	//namun jika ditemukan data yang sama maka akan return true
+	//bila return node kita akan return rootnya
+	else if(root->data == data) return root;
 	//kita akan search ke kiri bila data ini lebih kecil atau sama dengan root data
 	else if(data <= root->data) Search(root->left, data);
 	//kita akan search ke kanan bila data ini lebih besar dari root data
@@ -73,6 +93,14 @@ int FindMin(bst *root){
 	return FindMin(root->left);
 }
 
+bst* FindMinimal(bst *root){
+	if(root == NULL) return NULL;
+	else if(root->left == NULL){
+		return root;
+	}
+	return FindMin(root->left);
+}
+
 //di funsgi ini kita akan mencari nilai max dari data
 int FindMax(bst *root){
 	if(root == NULL){
@@ -95,6 +123,11 @@ int FindMax(bst *root){
 }
 
 //disini kita akan memanfaatkan recursif untuk traversal semua node yang ada di bst maka dari itu time complexity dari funsgi ini adalah o(n)
+// Fungsi untuk menghitung tinggi (height) dari BST
+// Height dihitung berdasarkan jumlah **edge** dari root ke leaf terdalam
+// - Base case: jika node kosong maka kita akan return -1
+// - Setiap node akan return nilai max dari anak kiri dan kanan, ditambah 1
+// - jika merupakan leaf node maka akan mengembalikan 0
 int FindHeight(bst* root){
 	//disini bila kita sudah mencapai leaf node atau node yang tidak mempunyai anak akan kita return dengan -1
 	//tujuan mengapa menggunakan -1 adalah karena di fmax sudah di +1 maka nilai leaf node ini nanti akan 0 namun bila kita return 0 maka nilai leaf node akan 1 sehingga kita akan menghitung leaf node ini
@@ -108,6 +141,17 @@ int FindHeight(bst* root){
 }
 
 //traversal sesuai dengan level dari nodenya atau bisa disebut bredth first
+//cara kerjanya adalah kita menggunakan queue yang dimana kita akan menyimpan semua alamat node di queue kemudian kita akan gunakan node yang ada di head untuk mengambil alamat yang ada di left dan right kemudian bila dua alamat ini sudah diambil maka kita akan dequeue headnya
+//disini kita bisa menggunakan linked list dan array untuk inisiasi queue nya
+// Fungsi LevelOrder (Breadth First Search):
+// - Menggunakan queue berbasis array (q[])
+// - Simpan pointer node dalam bentuk uintptr_t disini kita perlu casting isi dari q[] ke uintptr_t
+// - Proses:
+//   1. Tambahkan root ke queue
+//   2. Selama queue tidak kosong:
+//      - Ambil node dari head
+//      - Cetak data
+//      - Masukkan anak kiri dan kanan (jika ada) ke queue
 void LevelOrder(bst *root){
 	//bila root kosong berarti bst kosong jadi akan return null
 	if(root == NULL){
@@ -142,6 +186,7 @@ void LevelOrder(bst *root){
 
 //dalam depth traversal ini printf ini bisa kita misalkan sebagai root
 //preorder -> root left right, karena mulai dari root sehingga kita bisa menaruh printf dlu baru rekursi kiri dan kekanan
+//printf ini juga bisa berarti node sudah dikunjungi PreOrder(root->left) kalau hanya dengan ini belum berarti sudah dikunjungi namun sudah kita lewati
 void PreOrder(bst *root){
 	if(root == NULL) return;
 	printf("%d ", root->data);
@@ -174,7 +219,7 @@ int BstUtil(bst *root, int minValue, int maxValue){
 	//bila root->data ini lebih besar dari min dan lebih kecil dari max
 	if(root->data >= minValue && root->data <= maxValue
 		//dan disini kita akan lakukan rekursi dengan dengan memanggil BstUtil(root->left, minValue, root->data) dalam case ini karena kita ke node kiri maka kita akan memanggil fungsi BstUtil(alamat left, minValue, 10)
-		//kemudian kita akan mengecek if(root->data >= minValue && root->data <= maxValue) karena kita sudah pindah node yang memiliki data  8 sehingga if ini akan menjadi if(8 >= minValue && 8 <= 10) yang dimana adalah true untuk selanjutnya cara kerjanya sama seperti ini tinggal kita mengganti nilai saja
+		//kemudian kita akan mengecek if(root->data >= minValue && root->data <= maxValue) karena kita sudah pindah node yang memiliki data 8 sehingga if ini akan menjadi if(8 >= minValue && 8 <= 10) yang dimana adalah true untuk selanjutnya cara kerjanya sama seperti ini tinggal kita mengganti nilai saja
 	 	&& BstUtil(root->left, minValue, root->data)
 	 	//bagian ini cara kerjanya sama dengan diatas
 		&& BstUtil(root->right, root->data, maxValue))
@@ -183,7 +228,7 @@ int BstUtil(bst *root, int minValue, int maxValue){
 	//sebaliknya akan return false
 	else return 0;
 	//jadi dia akan akumulasi semua returnnya dari root ke subtree hingga ke leaf node bila semua return true maka tree adalah bst
-	//bila misal ada yang tidak sesuai maka dia akan terus return false
+	//bila misal ada yang tidak sesuai maka dia akan return false
 }
 
 //memudahkan dalam pemanggilan fungsi pengecekan bst
@@ -192,6 +237,14 @@ int IsBst(bst *root){
 }
 
 //delete node di bst
+// Fungsi Delete untuk menghapus node dari BST
+// Terdapat 3 kemungkinan kasus:
+// 1. Node tidak memiliki anak (leaf) maka langsung dihapus
+// 2. Node memiliki satu anak maka ganti node dengan anaknya
+// 3. Node memiliki dua anak:
+//    - Ambil nilai **terkecil dari subtree kanan**
+//    - Ganti nilai node dengan nilai tersebut
+//    - Hapus node yang berisi nilai pengganti tadi (leaf)
 bst* Delete(bst* root, int data){
 	//bila root null akan return root atau null karena disini root = null
 	if(root == NULL) return root;
@@ -228,7 +281,8 @@ bst* Delete(bst* root, int data){
 		}
 		//case 3: bila punya 2 anak
 		else{
-			//kita akan mencari nilai anaknya yang paling kecil 
+			//kita akan mencari nilai anaknya yang paling kecil
+			//kenapa meskipun anaknya tidak ada yang dikiri disini bisa mendapatkan min karena else ini aka ke recurse juga hingga node habis sehingga nanti akan menemukan nilai min
 			int temp = FindMin(root->right);
 			//nilai yang ingin dihapus kita ganti dengan nilai yang paling kecil
 			//nb: kenapa di case ini nodenya tidak di hapus karena dia memiliki 2 anak bila kita hapus nodenya maka struktur akan hancur dan banyak data akan hilang atau tidak bisa diakses
@@ -240,17 +294,92 @@ bst* Delete(bst* root, int data){
 		}
 	}
 	return root;
-} 
+}
 
+bst* GetInorderSuccessor(bst *root, int data){
+	//mencari posisi dari data
+	bst *curr = Find(root, data);
+	//bila tidak ditemukan maka tree kosong
+	if(curr == NULL) return NULL;
+	//case 1: jika node punya right
+	if(curr->right != NULL){
+		//bila menggunakan looping bisa seperti ini 
+		//bst *temp = curr;
+		//while(curr->left != NULL){
+			//temp = temp->left;
+			//return temp;
+			//akan return rekursi terus sampai menemukan nilai minimal di kanan
+			//Successor adalah nilai terkecil di subtree kanan
+			return FindMinimal(curr->right);
+		}
+	}
+	//case 2: bila tidak ada right
+	//1.Mulai dari root (karena kita perlu akses ke seluruh ancestor).
+	//2.Bandingkan curr->data dengan ancestor->data:
+	//3.Kalau curr->data < ancestor->data, berarti kita sedang berada di subtree kiri, jadi ancestor ini bisa jadi successor! ? simpan ke successor, lalu lanjut ke kiri
+	//4.Kalau curr->data >= ancestor->data, berarti kita masih harus ke kanan (tidak bisa jadi successor)
+	//5.Ulangi sampai kita menemukan node curr (alias node target)	
+	Return kandidat successor terakhir yang tersimpan.
+	else{
+		//kita bikin variabel untuk menyimpan sucessor
+		bst* successor;
+		//kemudian bikin variabel untuk menyimpan karena disini tidak punya right maka kita harus simpan semua ancestor disini kita muali dari root
+		//maksud ancestor disini adalah node yang posisinya diatas dari curr
+		bst* ancestor = root;
+		//ketika ancestor atau root ini tidak sama dengan curr maka
+		//nb: curr merupakan data yang ingin kita cari successornya
+		//jadi disini kita tidak ingin ancestor nya ini sama dengan curr
+		// Kita traversal dari root menuju node 'curr'
+		while(ancestor != curr){
+			//bila data curr ini lebih kecil dari ancestor
+			// disini artinya kita berjalan ke subtree kiri, jadi kandidat ancestor bisa jadi successor
+			if(curr->data < ancestor->data){
+				//bila data dari curr kurang dari ancestor kita ingin simpan ancestor itu di successor
+				successor = ancestor;
+				//kemudian kita akan pindah lagi ke kiri untuk mencari mengecek ancestor lain
+				ancestor = ancestor->left;	
+			}
+			//bila data dari ancestor ini lebih kecil maka kita akan pindah ke kanan untuk mencari data yang mempunyai nilai lebih besar dari ancestor
+			// kita berada di subtree kanan, jadi tidak bisa jadi successor
+			else{
+				ancestor = ancestor->right;
+			}
+		}
+		//bila loop sudah selesai maka kita akan return
+		return successor;
+	}
+	
+}
+//nb: 
+//Predecessor adalah Node terbesar yang lebih kecil dari node saat ini.Letaknya di subtree kiri paling kanan.
+//Successor adalah Node terkecil yang lebih besar dari node saat ini. Letaknya di subtree kanan paling kiri.
+
+//nb: fungsi yang memiliki time complexity O(h) adalah fungsi yang menelusuri dari root ke leaf
+//bila yang memiliki waktu O(n) adalah yang traversal ke seluruh node bst
 int main(){
 	bst *root = NULL;
+//	root = Insert(root, 10);
+//	root = Insert(root, 8);
+//	root = Insert(root, 12);
+//	root = Insert(root, 11);
+//	root = Insert(root, 14);
+//	root = Insert(root, 6);
+//	root = Insert(root, 7);
+	root = Insert(root, 50);
+	root = Insert(root, 30);
+	root = Insert(root, 70);
+	root = Insert(root, 20);
+	root = Insert(root, 40);
+	root = Insert(root, 60);
+	root = Insert(root, 80);
 	root = Insert(root, 10);
-	root = Insert(root, 8);
-	root = Insert(root, 12);
-	root = Insert(root, 11);
-	root = Insert(root, 14);
-	root = Insert(root, 6);
-	root = Insert(root, 7);
+	root = Insert(root, 25);
+	root = Insert(root, 35);
+	root = Insert(root, 45);
+	root = Insert(root, 55);
+	root = Insert(root, 65);
+	root = Insert(root, 75);
+	root = Insert(root, 90);
 //	int number;
 //	printf("Search Number: ");
 //	scanf("%d", &number);
@@ -270,8 +399,7 @@ int main(){
 		printf("tree is not bst \n");
 	}
 	else printf("tree is bst \n");
-	printf("root: %d \n", root);
-	root = Delete(root, 12);
+	root = Delete(root, 70);
 	InOrder(root);
 	return 0;
 }
